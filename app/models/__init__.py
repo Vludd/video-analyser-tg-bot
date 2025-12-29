@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sqlalchemy import (
     Integer, BigInteger, DateTime, ForeignKey, UUID as PGUUID
 )
@@ -47,7 +49,7 @@ class MVideo(Base):
     )
 
     snapshots = relationship(
-        "VideoSnapshot",
+        "MVideoSnapshot",
         back_populates="video",
         lazy="selectin"
     )
@@ -89,4 +91,4 @@ class MVideoSnapshot(Base):
         onupdate=lambda: datetime.now(timezone.utc)
     )
 
-    video = relationship("Video", back_populates="snapshots")
+    video = relationship("MVideo", back_populates="snapshots")

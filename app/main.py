@@ -1,5 +1,4 @@
 from app.bot.client import start_bot
-from app.dependencies import llm_engine
 from app.database.base import init_db
 from app.database import parse_and_save
 
@@ -14,7 +13,6 @@ async def start():
     init_db()
     # parse_and_save()
     await start_bot()
-    
 
 if __name__ == "__main__":
     asyncio.run(start())
