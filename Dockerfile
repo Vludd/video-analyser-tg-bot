@@ -8,7 +8,4 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 COPY . /app
 
-# Копируем .env, если нужно (можно монтировать volume при запуске)
-# COPY .env /app/.env
-
 CMD ["python", "-m", "app.main"]

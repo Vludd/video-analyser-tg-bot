@@ -8,6 +8,8 @@ from transformers import (
 
 import logging
 
+from app.config.llm import LLM_DEVICE
+
 logger = logging.getLogger(__name__)
 
 class LLMEngine:
@@ -18,9 +20,15 @@ class LLMEngine:
         self._load_model(model_id)
         self._load_context(system_prompt)
         
+    def _get_device_map(self):
+        if LLM_DEVICE == "cpu":
+            return {"": "cpu"}
+
+        return "auto"
+        
     def _load_model(self, model_id: str = ""):
         logger.info("Initializaion LLM engine...")
-
+        
         self.model = AutoModelForCausalLM.from_pretrained(
             model_id,
             local_files_only=True,
@@ -30,7 +38,7 @@ class LLMEngine:
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
             ),
-            device_map="auto",
+            device_map=self._get_device_map(),
             max_memory={0: "7GiB", "cpu": "30GiB"},
             dtype="auto",
             low_cpu_mem_usage=True,
@@ -39,6 +47,12 @@ class LLMEngine:
         self.tokenizer = AutoTokenizer.from_pretrained(model_id)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+        logger.info(
+            "LLM device: %s | CUDA available: %s ",
+            LLM_DEVICE,
+            torch.cuda.is_available(),
+        )
         
     def _load_context(self, system_prompt: str) -> None:
         if system_prompt:
