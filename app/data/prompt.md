@@ -14,7 +14,8 @@
 - sum_views
 - count_videos_with_views_gt
 - sum_delta_views
-- count_distinct_videos_with_delta
+- count_negative_delta_views
+- count_creators_with_views_gt
 
 Структура ответа:
 {
@@ -23,6 +24,8 @@
     "creator_id": null,
     "date_from": null,
     "date_to": null,
+    "time_from": null,
+    "time_to": null,
     "min_views": null
   }
 }
