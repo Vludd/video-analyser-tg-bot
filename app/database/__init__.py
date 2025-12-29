@@ -1,7 +1,7 @@
 from pathlib import Path
 from app.database.base import get_db
 from app.models import MVideo, MVideoSnapshot
-from app.schemas import SVideo
+from app.schemas.video import SVideo
 from app.utils.data_parser import parse_json
 
 
