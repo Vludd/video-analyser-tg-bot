@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16
+    container_name: analytics_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: analytics
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  bot:
+    build: .
+    container_name: analytics_bot
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./app/data:/app/data
+      - ${HOME}/.cache/huggingface/hub:/hf_cache
+    environment:
+      HF_HOME: /hf_cache
+      TRANSFORMERS_CACHE: /hf_cache
+    command: >
+      bash -c "
+      python -m app.database.init_data &&
+      python -m app.main
+      "
+    restart: unless-stopped
+
+volumes:
+  db_data:

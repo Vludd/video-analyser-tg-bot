@@ -26,7 +26,7 @@ class MVideo(Base):
     )
     
     video_created_at: Mapped[datetime] = mapped_column(
-        DateTime, 
+        DateTime(timezone=True), 
         nullable=False
     )
 

@@ -1,8 +1,5 @@
-from pathlib import Path
-from app.database.base import get_db
 from app.models import MVideo, MVideoSnapshot
 from app.schemas.video import SVideo
-from app.utils.data_parser import parse_json
 
 
 def models_to_orm(raw_data: list[SVideo]) -> tuple[list[MVideo], list[MVideoSnapshot]]:
@@ -42,16 +39,3 @@ def models_to_orm(raw_data: list[SVideo]) -> tuple[list[MVideo], list[MVideoSnap
             
     return videos_orm, snapshots_orm
 
-def parse_and_save():
-    path = Path(__file__).parent.parent / "data" / "videos.json"
-    raw_data = parse_json(path)
-    videos_data = [
-        SVideo(**v) 
-        for v in raw_data["videos"]
-    ]
-    
-    videos_orm, snapshots_orm = models_to_orm(videos_data)
-   
-    with get_db() as session:
-        session.bulk_save_objects(videos_orm)
-        session.bulk_save_objects(snapshots_orm)

@@ -11,7 +11,7 @@ from app.core.handlers import (
 )
 
 
-def execute_analytics_query(session, query: AnalyticsQuery) -> int:
+async def execute_analytics_query(session, query: AnalyticsQuery) -> int:
     handlers = {
         "count_videos": count_videos,
         "sum_views": sum_views,
@@ -26,4 +26,4 @@ def execute_analytics_query(session, query: AnalyticsQuery) -> int:
 
     logging.info(f"Query type: {query.query_type}")
     
-    return handler(session, query.filters)
+    return await handler(session, query.filters)
